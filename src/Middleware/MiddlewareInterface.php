@@ -1,9 +1,9 @@
 <?php
 
-namespace YourNamespace\Middleware;
+namespace app\Middleware;
 
-use YourNamespace\Http\RequestInterface;
-use YourNamespace\Http\ResponseInterface;
+use app\Http\RequestInterface;
+use app\Http\ResponseInterface;
 
 interface MiddlewareInterface
 {

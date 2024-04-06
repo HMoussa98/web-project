@@ -1,8 +1,8 @@
 <?php
 
-namespace YourNamespace\Http;
+namespace app\Middleware;
 
-use YourNamespace\Middleware\MiddlewareInterface;
+use app\Middleware\MiddlewareInterface;
 
 class MiddlewareDispatcher
 {

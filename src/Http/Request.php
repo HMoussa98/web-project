@@ -1,6 +1,6 @@
 <?php
 
-namespace YourNamespace\Http;
+namespace app\Http;
 
 class Request implements RequestInterface
 {

@@ -1,5 +1,5 @@
 <?php
-namespace YourNamespace\Http;
+namespace app\Http;
 
 interface ResponseInterface
 {
