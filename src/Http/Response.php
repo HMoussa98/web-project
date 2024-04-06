@@ -40,4 +40,18 @@ class Response implements ResponseInterface
         // Send HTTP response body
         echo $this->body;
     }
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    public function getBody(): string
+    {
+        return $this->body;
+    }
+    // Implement other methods from ResponseInterface if needed
 }

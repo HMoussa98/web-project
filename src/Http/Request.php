@@ -36,4 +36,6 @@ class Request implements RequestInterface
     {
         return $this->body;
     }
+
+    // Implement other methods from RequestInterface if needed
 }

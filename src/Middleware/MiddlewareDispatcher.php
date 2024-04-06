@@ -2,6 +2,8 @@
 
 namespace app\Middleware;
 
+use app\Http\RequestInterface;
+use app\Http\ResponseInterface;
 use app\Middleware\MiddlewareInterface;
 
 class MiddlewareDispatcher
