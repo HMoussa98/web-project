@@ -31,9 +31,7 @@ function outputResponse($response)
 $container = new SimpleContainer();
 
 // Register the template engine with the container
-$container->set('template_engine', function () {
-    return new TwigTemplateEngine();
-});
+$container->set('template_engine', new TwigTemplateEngine());
 
 // Define routes
 $staticRoutes = [
@@ -63,41 +61,41 @@ $dispatcher = new MiddlewareDispatcher($container); // Inject the container into
 $dispatcher->addMiddleware(new LoggerMiddleware());
 
 // Define a function to handle the request
-// Update the handleRequest function in index.php
-
-// Define a function to handle the request
-// Define a function to handle the request
 function handleRequest($request, $router, $dispatcher)
 {
     // Get the requested URL from the request
     $url = $request->getUri();
 
     // Match the route using the router
-    $route = $router->matchRoute($url);
+    $route = $router->matchRoute($url);   
 
     // If a route is found, execute the corresponding controller action
     if ($route !== null) {
         $controllerName = $route['controller'];
         $actionName = $route['action'];
-
+        
         // Check if the controller class exists
-        if (class_exists($controllerName)) {
+        if (class_exists('app\Controllers\\'.$controllerName)) {
             // Instantiate the controller
-            $controller = new $controllerName();
+            $controller = 'app\Controllers\\'.$controllerName;
+            $controllerInstance = new $controller();
 
             // Check if the action method exists in the controller
             if (method_exists($controller, $actionName)) {
                 // Execute the action method to get data
-                $data = $controller->$actionName();
+                $data = $controllerInstance->$actionName();
 
                 // Render the template using the template engine
+                
                 $templateEngine = $GLOBALS['container']->get('template_engine');
                 $templateContent = $templateEngine->render('index.html.twig', $data);
 
-                // Create a response with the template content
+                var_dump($templateContent);
+
+                // // Create a response with the template content
                 $response = new Response(200, ['Content-Type' => 'text/html'], $templateContent);
 
-                // Output the response
+                // // Output the response
                 outputResponse($response);
             } else {
                 // Action method not found in controller
@@ -124,12 +122,12 @@ $request1 = new Request('GET', '/', ['Content-Type' => 'text/plain'], 'Sample GE
 handleRequest($request1, $router, $dispatcher);
 echo "\n";
 
-// Test 2: Create a sample POST request
+// // Test 2: Create a sample POST request
 $request2 = new Request('POST', '/about', ['Content-Type' => 'application/json'], '{"key": "value"}');
 handleRequest($request2, $router, $dispatcher);
 echo "\n";
 
-// Test 3: Create a sample request with custom headers
+// // Test 3: Create a sample request with custom headers
 $request3 = new Request('PUT', '/contact', ['X-Custom-Header' => 'CustomValue'], 'Sample request body');
 handleRequest($request3, $router, $dispatcher);
 echo "\n";
