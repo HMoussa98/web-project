@@ -1,0 +1,15 @@
+{
+    "name": "hussain/web-project",
+    "authors": [
+        {
+            "name": "HMoussa98",
+            "email": "wordpresstest1.0.0@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {}
+}
