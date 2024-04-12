@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    {{ content }}
+    {{content}}
 </body>
 </html>
