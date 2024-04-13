@@ -34,6 +34,7 @@ $container->set('router', function () {
     return $router;
 });
 
+
 $container->set('middlewareDispatcher', function () {
     $middlewareDispatcher = new MiddlewareDispatcher();
     $middlewareDispatcher->addMiddleware(new LoggerMiddleware());
@@ -46,7 +47,7 @@ $router = $container->get('router');
 $middlewareDispatcher = $container->get('middlewareDispatcher');
 
 // Simulate incoming request
-$request = new Request('GET', '/hello', [], '');
+$request = new Request('GET', '/home', [], '');
 
 // Route the request
 $route = $router->matchRoute($request->getUri());
