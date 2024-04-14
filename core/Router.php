@@ -2,6 +2,9 @@
 
 namespace app\core;
 
+use app\Http\Request;
+use app\Http\Response;
+
 class Router
 {
     protected array $routes = [];

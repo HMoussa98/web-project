@@ -2,6 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
+use app\controllers\Migrations;
 use app\repositories\CardDeckRepository;
 use app\repositories\UserRepository;
 use app\repositories\CardRepository;
@@ -25,13 +26,14 @@ $roleRepository = new RoleRepository();
 $userRoleRepository = new UserRoleRepository();
 $subscriptionTypeRepository = new SubscriptionTypeRepository();
 
+
 // Display all users
 $users = $userRepository->findAll();
 echo "<h2>All Users</h2>";
 echo "<table border='1'>";
-echo "<tr><th>User ID</th><th>Name</th><th>Email</th></tr>";
+echo "<tr><th>User ID</th><th>Name</th><th>Email</th><th>Password</th></tr>";
 foreach ($users as $user) {
-    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td></tr>";
+    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td><td>{$user->getPassword()}</td></tr>";
 }
 echo "</table>";
 
@@ -90,22 +92,22 @@ echo "</table>";
 // Display users per role
 $roleId = 1; // Example role ID
 $usersPerRole = $userRoleRepository->findAllUsersByRole($roleId);
-echo "<h2>All Users with Role (ID: $roleId)</h2>";
+echo "<h2>All Users with Role (ID: $roleId) Admin</h2>";
 echo "<table border='1'>";
-echo "<tr><th>User ID</th><th>Name</th><th>Email</th></tr>";
+echo "<tr><th>User ID</th><th>Name</th><th>Email</th><th>Password</th></tr>";
 foreach ($usersPerRole as $user) {
-    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td></tr>";
+    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td><td>{$user->getPassword()}</td></tr>";
 }
 echo "</table>";
 
 // Display users per role
 $roleId2 = 2; // Example role ID
 $usersPerRole = $userRoleRepository->findAllUsersByRole($roleId2);
-echo "<h2>All Users with Role (ID: $roleId2)</h2>";
+echo "<h2>All Users with Role (ID: $roleId2) User</h2>";
 echo "<table border='1'>";
-echo "<tr><th>User ID</th><th>Name</th><th>Email</th></tr>";
+echo "<tr><th>User ID</th><th>Name</th><th>Email</th><th>Password</th></tr>";
 foreach ($usersPerRole as $user) {
-    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td></tr>";
+    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td><td>{$user->getPassword()}</td></tr>";
 }
 echo "</table>";
 
@@ -135,9 +137,9 @@ $subscriptionTypeId = 1; // Example subscription type ID
 $usersPerSubscriptionType = $subscriptionTypeRepository->findAllUsersBySubscriptionType($subscriptionTypeId);
 echo "<h2>All Users with Subscription Type (ID: $subscriptionTypeId) Free</h2>";
 echo "<table border='1'>";
-echo "<tr><th>User ID</th><th>Name</th><th>Email</th></tr>";
+echo "<tr><th>User ID</th><th>Name</th><th>Email</th><th>Password</th></tr>";
 foreach ($usersPerSubscriptionType as $user) {
-    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td></tr>";
+    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td><td>{$user->getPassword()}</td></tr>";
 }
 echo "</table>";
 
@@ -146,9 +148,10 @@ $subscriptionTypeId = 2; // Example subscription type ID
 $usersPerSubscriptionType = $subscriptionTypeRepository->findAllUsersBySubscriptionType($subscriptionTypeId);
 echo "<h2>All Users with Subscription Type (ID: $subscriptionTypeId) Premium</h2>";
 echo "<table border='1'>";
-echo "<tr><th>User ID</th><th>Name</th><th>Email</th></tr>";
+echo "<tr><th>User ID</th><th>Name</th><th>Email</th><th>Password</th></tr>";
+
 foreach ($usersPerSubscriptionType as $user) {
-    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td></tr>";
+    echo "<tr><td>{$user->getId()}</td><td>{$user->getUsername()}</td><td>{$user->getEmail()}</td><td>{$user->getPassword()}</td></tr>";
 }
 echo "</table>";
 
