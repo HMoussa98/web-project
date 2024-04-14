@@ -16,35 +16,25 @@ $this->pdo = $database->connect();
 public function runMigrations()
 {
 $migrationFiles = $this->getMigrationFiles();
-    echo "migrationFiles";
-    echo "<br>";
-    echo "<br>";
-
-var_dump($migrationFiles);
-    echo "<br>";
-    echo "<br>";
 
 foreach ($migrationFiles as $migrationFile) {
-$migrationName = $this->getMigrationName($migrationFile);
-echo "migrationName inside foreach";
-echo "<br>";
-echo "<br>";
-var_dump($migrationName);
-if (!$this->migrationExists($migrationName)) {
-    echo "migrationName  inside if";
-    echo "<br>";
-    var_dump($migrationName);
-    echo "<br>";
-    echo "<br>";
+    $migrationName = $this->getMigrationName($migrationFile);
+
+    if (!$this->migrationExists($migrationName)) {
+        echo "migrationName  inside if";
+        echo "<br>";
+        var_dump($migrationName);
+        echo "<br>";
+        echo "<br>";
 
 
-    echo "migrationFile inside if";
-    echo "<br>";
-    var_dump($migrationFile);
-    echo "<br>";
-    echo "<br>";
-$this->applyMigration($migrationName, $migrationFile);
-}
+        echo "migrationFile inside if";
+        echo "<br>";
+        var_dump($migrationFile);
+        echo "<br>";
+        echo "<br>";
+    $this->applyMigration($migrationName, $migrationFile);
+    }
 }
 
 echo "Migrations completed\n";
@@ -52,7 +42,7 @@ echo "Migrations completed\n";
 
 public function getMigrationFiles()
 {
-return glob('migrations/*.php');
+return glob('../migrations/*.php');
 }
 
     public function getMigrationName($migrationFile)

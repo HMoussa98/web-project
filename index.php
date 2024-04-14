@@ -27,7 +27,6 @@ $userRoleRepository = new UserRoleRepository();
 $subscriptionTypeRepository = new SubscriptionTypeRepository();
 
 
-
 // Display all users
 $users = $userRepository->findAll();
 echo "<h2>All Users</h2>";
