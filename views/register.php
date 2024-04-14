@@ -1,25 +1,17 @@
+<!-- views/register.php -->
 <h1>Register</h1>
-
 <form method="post">
-    <div class="mb-3">
-        <label>Firstname</label>
-        <input type="text" name="firstname">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
     </div>
-    <div class="mb-3">
-        <label>Lastname</label>
-        <input type="text" name="lastname">
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
     </div>
-    <div class="mb-3">
-        <label>email</label>
-        <input type="text" name="email">
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
     </div>
-    <div class="mb-3">
-        <label>Pssword</label>
-        <input type="password" name="password">
-    </div>
-    <div class="mb-3">
-        <label>Pssword repeat</label>
-        <input type="password" name="confirmPassword">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit">Register</button>
 </form>
