@@ -2,8 +2,10 @@
 
 namespace app\Http;
 
-class Request  implements RequestInterface
+class Request implements RequestInterface
 {
+
+    private array $routeParams = [];
 
     public function getPath()
     {
@@ -48,4 +50,21 @@ class Request  implements RequestInterface
 
         return $body;
     }
+
+    public function setRouteParams($params)
+    {
+        $this->routeParams = $params;
+        return $this;
+    }
+
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    public function getRouteParam($param, $default = null)
+    {
+        return $this->routeParams[$param] ?? $default;
+    }
+    
 }

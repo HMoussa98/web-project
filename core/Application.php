@@ -8,11 +8,25 @@ use app\Http\Middleware\MiddlewareInterface;
 
 class Application
 {
+
+    // const EVENT_BEFORE_REQUEST = 'beforeRequest';
+    // const EVENT_AFTER_REQUEST = 'afterRequest';
+
+    // protected array $eventListeners = [];
+
     public static string $ROOT_DIR;
     public Router $router;
     public Request $request;
     public Response $response;
     public static Application $app;
+
+    // public string $layout = 'main';
+    // public ?Controller $controller = null;
+    // public Database $db;
+    // public Session $session;
+    // public View $view;
+    // public ?UserModel $user;
+    // public string $userClass;
 
     public function __construct($rootPath)
     {
@@ -32,8 +46,14 @@ class Application
     }
 
     public function run()
-    {
-        echo $this->router->resolve();
+    { 
+        try {
+            echo $this->router->resolve();
+        } catch (\Exception $e) {
+            echo $this->router->renderView('_error', [
+                'exception' => $e,
+            ]);
+        }
     }
 
 }
