@@ -2,69 +2,28 @@
 
 namespace app\Http;
 
-class Request implements RequestInterface
+class Request
 {
+    private $method;
+    private $uri;
 
-    private array $routeParams = [];
-
-    public function getPath()
-    {
-        $path = $_SERVER['REQUEST_URI'] ?? '/';
-        $position = strpos($path, '?');
-        if ($position === false) {
-            return $path;
-        }
-
-        return substr($path, 0, $position);
+    public function __construct($method, $uri) {
+        $this->method = $method;
+        $this->uri = $uri;
     }
 
-    public function method()
-    {
-        return strtolower($_SERVER['REQUEST_METHOD']);
+    public static function fromGlobals(): self {
+        return new self(
+            $_SERVER['REQUEST_METHOD'],
+            $_SERVER['REQUEST_URI']
+        );
     }
 
-    public function isGet()
-    {
-        return $this->method() === 'get';
+    public function getMethod(): string {
+        return $this->method;
     }
 
-    public function isPost()
-    {
-        return $this->method() === 'post';
+    public function getUri(): string {
+        return $this->uri;
     }
-
-    public function getBody()
-    {
-        $body = [];
-        if ($this->method() === 'get') {
-            foreach ($_GET as $key => $value) {
-                $body[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-        if ($this->method() === 'post') {
-            foreach ($_POST as $key => $value) {
-                $body[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
-            }
-        }
-
-
-        return $body;
-    }
-
-    public function setRouteParams($params)
-    {
-        $this->routeParams = $params;
-        return $this;
-    }
-
-    public function getRouteParams()
-    {
-        return $this->routeParams;
-    }
-
-    public function getRouteParam($param, $default = null)
-    {
-        return $this->routeParams[$param] ?? $default;
-    }
-    
 }
