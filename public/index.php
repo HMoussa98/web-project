@@ -33,9 +33,11 @@ $router->addRoute('GET', '/card', function($id) use ($container) {
 
 // Dispatch request through middleware
 $request = Request::fromGlobals();
-$response = $dispatcher->dispatch($request, function($request) use ($router) {
-    return $router->dispatch($request);
-});
-// echo "<pre>";
-// var_dump($response); 
+// $response = $dispatcher->dispatch($request, function($request) use ($router) {
+//     return $router->dispatch($request);
+// });
+
+$response = new Response('Hello World', 200, ['Content-Type' => 'text/plain']);
+echo "<pre>";
+var_dump($response);
 $response->send();
