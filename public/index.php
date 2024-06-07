@@ -14,6 +14,14 @@ $container->set('template', function() {
     return new Template('../templates');
 });
 
+$container->set('HomeController', function($container) {
+    return new app\Controller\HomeController($container->get('template'));
+});
+
+$container->set('CardController', function($container) {
+    return new app\Controller\CardController($container->get('template'));
+});
+
 // Middleware setup
 $dispatcher = new Dispatcher();
 $dispatcher->add(new RequestLogger());
@@ -21,23 +29,19 @@ $dispatcher->add(new RequestLogger());
 // Router setup
 $router = new Router($container);
 $router->addRoute('GET', '/', function() use ($container) {
-    $template = $container->get('template');
-    return new Response($template->render('home'));
+    $controller = $container->get('HomeController');
+    return $controller->index();
 });
 
-$router->addRoute('GET', '/card', function($id) use ($container) {
-    $template = $container->get('template');
-    return new Response($template->render('card'    ));
+$router->addRoute('GET', '/card', function() use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->show();
 });
 
 
 // Dispatch request through middleware
 $request = Request::fromGlobals();
-// $response = $dispatcher->dispatch($request, function($request) use ($router) {
-//     return $router->dispatch($request);
-// });
-
-$response = new Response('Hello World', 200, ['Content-Type' => 'text/plain']);
-echo "<pre>";
-var_dump($response);
+$response = $dispatcher->dispatch($request, function($request) use ($router) {
+    return $router->dispatch($request);
+});
 $response->send();
