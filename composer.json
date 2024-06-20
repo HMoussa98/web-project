@@ -1,4 +1,4 @@
-{
+{   
     "name": "hussain/web-project",
     "authors": [
         {
@@ -11,5 +11,10 @@
             "app\\": "./"
         }
     },
-    "require": {}
+    "require": {
+        "monolog/monolog": ">=2.0.0",
+        "psr/container": "^1.0",
+        "psr/http-message": "^2.0",
+        "guzzlehttp/psr7": "^2.6"
+    }
 }

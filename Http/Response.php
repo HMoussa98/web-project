@@ -2,15 +2,21 @@
 
 namespace app\Http;
 
-class Response implements ResponseInterface
+class Response
 {
-    public function setStatusCode(int $code)
-    {
-        http_response_code($code);
+    private $body;
+    private $status;
+
+    public function __construct($body = '', $status = 200) {
+        $this->body = $body;
+        $this->status = $status;
     }
 
-    public function redirect($url)
-    {
-        header("Location: $url");
+    public function send() {
+        http_response_code($this->status);
+        foreach ($this->headers as $name => $value) {
+            header("$name: $value");
+        }
+        echo $this->body;
     }
 }
