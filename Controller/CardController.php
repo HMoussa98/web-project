@@ -6,16 +6,20 @@ use app\Http\Request;
 use app\Http\Response;
 use app\View\Template;
 use app\Model\Card;
+use app\Model\DeckModel;
 
 class CardController
 {
     private $template;
     private $cardModel;
+    private $deckModel;
 
-    public function __construct(Template $template, Card $cardModel)
+
+    public function __construct(Template $template, Card $cardModel, DeckModel $deckModel)
     {
         $this->template = $template;
         $this->cardModel = $cardModel;
+        $this->deckModel = $deckModel;
     }
 
     public function showCreateForm(): Response
@@ -61,13 +65,21 @@ class CardController
         return new Response($this->template->render('card_index', ['cards' => $cards]));
     }
 
-    public function show($id): Response
+    public function show(Request $request): Response
     {
+
+        $userId = 1;
+
+        $decks = $this->deckModel->getAllDecksByUserId($userId);
+
+        $id = $request->getIdFromUri();
         $card = $this->cardModel->getCardById($id);
-        if ($card) {
-            return new Response($this->template->render('card_show', ['card' => $card]));
-        }
-        return new Response('Card not found', 404);
+
+
+        return new Response($this->template->render('card_show', ['card' => $card, 'decks' => $decks]));
+
+
+        // return new Response('Card not found', 404);
     }
     public function edit2(): Response
     {
@@ -76,9 +88,33 @@ class CardController
         return new Response($this->template->render('card_edit', ['']));
     }
 
-    public function edit(Request $request, $id): Response
+
+    public function delete(Request $request): Response
+    {
+        if ($request->getMethod() === 'POST') {
+            $id = $request->getIdFromUri();
+
+            // Debugging: var dump to check the value of $id
+            var_dump($id);
+
+            try {
+                $this->cardModel->deleteCard($id);
+                return new Response('Card deleted', 200);
+            } catch (\Exception $e) {
+                return new Response('Failed to delete card: ' . $e->getMessage(), 500);
+            }
+        } else {
+            return new Response('Wrong request method', 400);
+        }
+    }
+
+
+
+
+    public function edit(Request $request): Response
     {
         // Retrieve the card details by ID
+        $id = $request->getIdFromUri();
         $card = $this->cardModel->getCardById($id);
 
         if (!$card) {
@@ -87,7 +123,7 @@ class CardController
         }
 
         // If the request method is GET, render the edit form
-        if ($request->getMethod() === 'GET') {
+        if ($request->getMethod() === 'POST') {
             return new Response($this->template->render('card_edit', ['card' => $card]));
         }
 
@@ -96,10 +132,12 @@ class CardController
     }
 
 
-    public function update(Request $request, $id): Response
+    public function update(Request $request): Response
     {
+
         if ($request->getMethod() === 'POST') {
             $data = $request->getPostData();
+            $id = $request->getIdFromUri();
 
             // Validate if all required fields are present
             if (

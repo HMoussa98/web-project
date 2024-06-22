@@ -40,6 +40,14 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
         button {
             background-color: #007bff;
             color: white;
@@ -75,7 +83,12 @@
         <input type="text" id="set_name" name="set_name" required><br>
 
         <label for="rarity">Rarity:</label>
-        <input type="text" id="rarity" name="rarity" required><br>
+        <select id="rarity" name="rarity" required>
+            <option value="Common">Common</option>
+            <option value="Rare">Rare</option>
+            <option value="Ultra-Rare">Ultra-Rare</option>
+            <option value="Super-Rare">Super-Rare</option>
+        </select><br>
 
         <label for="price">Price:</label>
         <input type="number" id="price" name="price" step="0.01" required><br>

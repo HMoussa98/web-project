@@ -51,6 +51,8 @@
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
+            display: block;
+            margin: 0 auto;
         }
         button:hover {
             background-color: #0056b3;
@@ -61,7 +63,7 @@
 <div class="container">
     <h1>Edit User</h1>
 
-    <form method="post" action="/users/update/<?= $user['id'] ?>">
+    <form method="post" action="/users/edit/<?= $user['id'] ?>">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required><br>
 
@@ -69,6 +71,7 @@
         <select id="role" name="role" required>
             <option value="user" <?= ($user['role'] === 'user') ? 'selected' : '' ?>>User</option>
             <option value="admin" <?= ($user['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+            <option value="premium" <?= ($user['role'] === 'premium') ? 'selected' : '' ?>>Premium</option>
         </select><br>
 
         <button type="submit">Update User</button>

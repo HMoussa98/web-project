@@ -1,5 +1,6 @@
 <?php
 require_once '../vendor/autoload.php';
+session_start();
 
 use app\Controller\DeckController;
 use app\Http\Request;
@@ -41,7 +42,7 @@ $container->set('HomeController', function ($container) {
 });
 
 $container->set('CardController', function ($container) {
-    return new app\Controller\CardController($container->get('template'), $container->get('CardModel'));
+    return new app\Controller\CardController($container->get('template'), $container->get('CardModel'), $container->get('DeckModel'));
 });
 
 $container->set('UserController', function ($container) {
@@ -96,7 +97,7 @@ $router->addRoute('POST', '/register', function () use ($container) {
     return $controller->register($request);
 });
 
-$router->addRoute('GET', '/card/edit/{id}', function ($id) use ($container) {
+$router->addRoute('POST', '/card/edit/{id}', function ($id) use ($container) {
     $controller = $container->get('CardController');
     return $controller->edit(Request::fromGlobals(), $id);
 });
@@ -104,6 +105,12 @@ $router->addRoute('GET', '/card/edit/{id}', function ($id) use ($container) {
 $router->addRoute('GET', '/card/edit', function () use ($container) {
     $controller = $container->get('CardController');
     return $controller->edit2();
+});
+
+$router->addRoute('POST', '/deck/add/{cardId}', function ($cardId) use ($container) {
+    $controller = $container->get('DeckController');
+    $request = Request::fromGlobals();
+    return $controller->addCardToDeck($request, $cardId);
 });
 
 $router->addRoute('GET', '/decks', function () use ($container) {
@@ -145,15 +152,29 @@ $router->addRoute('POST', '/card/delete/{id}', function ($id) use ($container) {
     return $controller->delete(Request::fromGlobals(), $id);
 });
 
+$router->addRoute('GET', '/card/show/{id}', function ($id) use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->show(Request::fromGlobals(), $id);
+});
+
+
+
+
 $router->addRoute('GET', '/users', function () use ($container) {
     $controller = $container->get('UserController');
     return $controller->index();
 });
 
-$router->addRoute('GET', '/users/show-edit', function () use ($container) {
+$router->addRoute('GET', '/users/edit/{id}', function ($id) use ($container) {
     $controller = $container->get('UserController');
-    return $controller->showForm();
+    return $controller->edit(Request::fromGlobals(), $id);
 });
+
+$router->addRoute('POST', '/users/edit/{id}', function ($id) use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->edit(Request::fromGlobals(), $id);
+});
+
 
 $router->addRoute('POST', '/users/delete/{id}', function ($id) use ($container) {
     $controller = $container->get('UserController');
@@ -179,16 +200,20 @@ $response->send();
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
-            padding-top: 70px; /* Adjust body padding to accommodate fixed navbar */
+            padding-top: 70px;
+            /* Adjust body padding to accommodate fixed navbar */
         }
+
         .navbar {
             overflow: hidden;
             background-color: #333;
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000; /* Ensure the navbar stays above other content */
+            z-index: 1000;
+            /* Ensure the navbar stays above other content */
         }
+
         .navbar a {
             float: left;
             display: block;
@@ -197,14 +222,18 @@ $response->send();
             padding: 14px 20px;
             text-decoration: none;
         }
+
         .navbar a:hover {
             background-color: #ddd;
             color: black;
         }
+
         .navbar .right {
             float: right;
         }
-        .navbar .login-btn, .navbar .register-btn {
+
+        .navbar .login-btn,
+        .navbar .register-btn {
             background-color: #4CAF50;
             border: none;
             color: white;
@@ -217,7 +246,9 @@ $response->send();
             cursor: pointer;
             border-radius: 5px;
         }
-        .navbar .login-btn:hover, .navbar .register-btn:hover {
+
+        .navbar .login-btn:hover,
+        .navbar .register-btn:hover {
             background-color: #45a049;
         }
     </style>
@@ -227,11 +258,9 @@ $response->send();
     <a href="/">Home</a>
     <a href="/cards/create">Create Card</a>
     <a href="/decks">View Decks</a>
-    <a href="/deck/make">Create Deck</a>
     <a href="/users">View Users</a>
     <div class="right">
         <a class="login-btn" href="/login">Login</a>
         <a class="register-btn" href="/register">Register</a>
     </div>
 </div>
-

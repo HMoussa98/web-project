@@ -53,4 +53,23 @@ class UserModel
         $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id");
         $stmt->execute(['id' => $id]);
     }
+
+    public function getUserById($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updateUser($id, $data)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET username = :username, role = :role WHERE id = :id");
+        $stmt->execute([
+            'id' => $id,
+            'username' => $data['username'],
+            'role' => $data['role'],
+        ]);
+
+        return $stmt->rowCount() > 0; // Return true if updated rows > 0, otherwise false
+    }
 }

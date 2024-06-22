@@ -14,11 +14,11 @@
             padding: 20px;
         }
 
-        h1 {
+        .h1text {
             text-align: center;
         }
 
-        form {
+        .frm {
             max-width: 400px;
             margin: 0 auto;
             background-color: #fff;
@@ -27,7 +27,7 @@
             border-radius: 5px;
         }
 
-        label {
+        .lbl {
             display: block;
             margin-bottom: 10px;
         }
@@ -40,7 +40,7 @@
             border-radius: 3px;
         }
 
-        button[type="submit"] {
+        .btn {
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -54,7 +54,7 @@
             border-radius: 3px;
         }
 
-        button[type="submit"]:hover {
+       .btn:hover {
             background-color: #45a049;
         }
     </style>

@@ -56,35 +56,86 @@
         .actions a:hover, .actions button:hover {
             background-color: #0056b3;
         }
+
+        .h1text {
+            text-align: center;
+        }
+
+        .frm {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .lbl {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+       .btn:hover {
+            background-color: #45a049;
+        }
+      
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>User Decks</h1>
-
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($decks as $deck): ?>
+    <div class="container">
+        <h1 class="h1text">Create New Deck</h1>
+        <form class="frm" method="post" action="/deck/make">
+            <label class="lbl" for="name">Deck Name:</label>
+            <input type="text" id="name" name="name" required>
+            <button class="btn" type="submit">Create Deck</button>
+        </form>
+        <h1>User Decks</h1>
+    
+        <table>
+            <thead>
             <tr>
-                <td><?= $deck['id'] ?></td>
-                <td><?= htmlspecialchars($deck['name']) ?></td>
-                <td class="actions">
-                    <a href="/deck/<?= $deck['id'] ?>">View</a>
-                    <form action="/deck/delete/<?= $deck['id'] ?>" method="post">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
             </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
-</body>
-</html>
+            </thead>
+            <tbody>
+            <?php foreach ($decks as $deck): ?>
+                <tr>
+                    <td><?= $deck['id'] ?></td>
+                    <td><?= htmlspecialchars($deck['name']) ?></td>
+                    <td class="actions">
+                        <a href="/deck/<?= $deck['id'] ?>">View</a>
+                        <form action="/deck/delete/<?= $deck['id'] ?>" method="post" onsubmit="return confirm('Are you sure you want to delete this deck?');">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    </body>
+    </html>

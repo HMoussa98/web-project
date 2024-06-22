@@ -51,32 +51,30 @@ class DeckController
         // Replace with user authentication logic to get userId
         $userId = 1; // Replace with actual user ID
 
-        $deck = $this->deckModel->getDeckById($deckId);
+        $deckId = $request->getIdFromUri();
 
-        if (!$deck || $deck['user_id'] != $userId) {
-            return new Response('Deck not found or you do not have permission to view it', 404);
-        }
+
 
         $cards = $this->deckModel->getCardsInDeck($deckId);
+        $deck = $this->deckModel->getDeckById($deckId);
 
         $content = $this->template->render('decks/show', [
-            'deck' => $deck,
+
             'cards' => $cards,
+            'deck' => $deck,
         ]);
 
         return new Response($content);
     }
 
-    public function delete(Request $request, $deckId): Response
+    public function delete(Request $request): Response
     {
         // Replace with user authentication logic to get userId
         $userId = 1; // Replace with actual user ID
 
-        $deck = $this->deckModel->getDeckById($deckId);
+        $deckId = $request->getIdFromUri();
 
-        if (!$deck || $deck['user_id'] != $userId) {
-            return new Response('Deck not found or you do not have permission to delete it', 404);
-        }
+
 
         $this->deckModel->deleteDeck($deckId);
 
@@ -96,5 +94,39 @@ class DeckController
         ]);
 
         return new Response($content);
+    }
+
+    public function addCardToDeck(Request $request, $cardId): Response
+    {
+        if ($request->getMethod() === 'POST') {
+            $data = $request->getPostData();
+            $deckId = (int) ($data['deck_id'] ?? 0);
+            $cardId = $request->getIdFromUri();
+            // var_dump($deckId);
+
+            if (!isset($data['deck_id'])) {
+                return new Response('Deck ID is required', 400);
+            }
+
+            // Replace with user authentication logic to get userId
+            $userId = 1; // Replace with actual user ID
+
+            $deck = $this->deckModel->getDeckById($deckId);
+
+            if (!$deck || $deck['user_id'] != $userId) {
+                return new Response('Deck not found or you do not have permission to add cards to it', 404);
+            }
+
+            try {
+                // Replace count with the actual count you want to add
+                $count = 1; // Example: adding 1 card
+                $this->deckModel->addCardToDeck($deckId, $cardId, $count);
+                return new Response('Card added to deck successfully', 200);
+            } catch (\PDOException $e) {
+                return new Response('Failed to add card to deck: ' . $e->getMessage(), 500);
+            }
+        }
+
+        return new Response('Method not allowed', 405);
     }
 }

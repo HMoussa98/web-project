@@ -16,6 +16,9 @@ class UserController
     {
         $this->template = $template;
         $this->userModel = $userModel;
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     public function index(): Response
@@ -25,14 +28,57 @@ class UserController
         return new Response($content);
     }
 
+    public function edit(Request $request): Response
+    {
+        $userId = $request->getIdFromUri();
+        if ($request->getMethod() === 'POST') {
+            $data = $request->getPostData();
+
+            if (!isset($data['username']) || !isset($data['role'])) {
+                return new Response('Missing required fields', 400);
+            }
+
+            try {
+                $updated = $this->userModel->updateUser($userId, [
+                    'username' => $data['username'],
+                    'role' => $data['role']
+                ]);
+
+                if (!$updated) {
+                    return new Response('Failed to update user', 500);
+                }
+
+                // Optionally, redirect to the user list or show a success message
+                return new Response('User updated successfully', 200);
+            } catch (\PDOException $e) {
+                return new Response('Failed to update user: ' . $e->getMessage(), 500);
+            }
+        }
+
+        // Fetch user details for editing
+        $user = $this->userModel->getUserById($userId);
+
+        if (!$user) {
+            return new Response('User not found', 404);
+        }
+
+        // Render the edit form with the user details
+        $content = $this->template->render('users/edit', ['user' => $user]);
+        return new Response($content);
+    }
+
+
+
+
     public function showForm(): Response
     {
         return new Response($this->template->render('users/edit'));
     }
 
-    public function deleteUser(Request $request, $id): Response
+    public function deleteUser(Request $request): Response
     {
         if ($request->getMethod() === 'POST') {
+            $id = $request->getIdFromUri();
             $this->userModel->deleteUser($id);
             return new Response('', 303, ['Location' => '/users']);
         } else {

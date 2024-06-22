@@ -44,4 +44,9 @@ class Request
     {
         return $this->postData;
     }
+    public function getIdFromUri(): int
+    {
+        $uriParts = explode('/', trim($this->uri, '/'));
+        return (int) end($uriParts);
+    }
 }
