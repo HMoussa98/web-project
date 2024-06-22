@@ -8,40 +8,157 @@ use app\Middleware\RequestLogger;
 use app\Routing\Router;
 use app\Container\Container;
 use app\View\Template;
+use app\Model\Card;
+use app\Model\UserModel;
+use app\Model\DeckModel;
+
+use app\Controller\UserController;
+use app\Database\DatabaseConnector;
+
+$dbFile = __DIR__ . '/../trading_card_game.db';
+$db = DatabaseConnector::getInstance($dbFile)->getConnection();
 
 $container = new Container();
-$container->set('template', function() {
+$container->set('template', function () {
     return new Template('../templates');
 });
 
-$container->set('HomeController', function($container) {
+$container->set('CardModel', function ($container) use ($db) {
+    return new Card($db);
+});
+
+$container->set('UserModel', function ($container) use ($db) {
+    return new UserModel($db);
+});
+
+$container->set('DeckModel', function ($container) use ($db) { // Corrected to DeckModel
+    return new DeckModel($db); // Instantiate DeckModel instead of UserModel
+});
+
+$container->set('HomeController', function ($container) {
     return new app\Controller\HomeController($container->get('template'));
 });
 
-$container->set('CardController', function($container) {
-    return new app\Controller\CardController($container->get('template'));
+$container->set('CardController', function ($container) {
+    return new app\Controller\CardController($container->get('template'), $container->get('CardModel'));
 });
 
-// Middleware setup
+$container->set('UserController', function ($container) {
+    return new app\Controller\UserController($container->get('template'), $container->get('UserModel'));
+});
+
+$container->set('DeckController', function ($container) { // Corrected to DeckController
+    return new app\Controller\DeckController($container->get('template'), $container->get('DeckModel')); // Instantiate DeckController
+});
+
 $dispatcher = new Dispatcher();
 $dispatcher->add(new RequestLogger());
 
-// Router setup
 $router = new Router($container);
-$router->addRoute('GET', '/', function() use ($container) {
-    $controller = $container->get('HomeController');
+
+$router->addRoute('GET', '/', function () use ($container) {
+    $controller = $container->get('CardController');
     return $controller->index();
 });
 
-$router->addRoute('GET', '/card', function() use ($container) {
+$router->addRoute('GET', '/cards/create', function () use ($container) {
     $controller = $container->get('CardController');
-    return $controller->show();
+    return $controller->showCreateForm();
+});
+
+$router->addRoute('POST', '/cards/create', function () use ($container) {
+    $controller = $container->get('CardController');
+    $request = Request::fromGlobals();
+    return $controller->create($request);
 });
 
 
-// Dispatch request through middleware
+
+$router->addRoute('GET', '/login', function () use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->showLoginForm();
+});
+
+$router->addRoute('POST', '/login', function () use ($container) {
+    $controller = $container->get('UserController');
+    $request = Request::fromGlobals();
+    return $controller->login($request);
+});
+
+
+$router->addRoute('GET', '/register', function () use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->showRegisterForm();
+});
+
+$router->addRoute('POST', '/register', function () use ($container) {
+    $controller = $container->get('UserController');
+    $request = Request::fromGlobals();
+    return $controller->register($request);
+});
+$router->addRoute('GET', '/card/edit/{id}', function ($id) use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->edit(Request::fromGlobals(), $id);
+});
+
+
+$router->addRoute('GET', '/card/edit', function () use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->edit2();
+});
+
+
+$router->addRoute('GET', '/decks', function () use ($container) {
+    $controller = $container->get('DeckController');
+    return $controller->index();
+});
+
+$router->addRoute('GET', '/deck/make', function () use ($container) {
+    $controller = $container->get('DeckController');
+    return $controller->showForm();
+});
+
+$router->addRoute('POST', '/deck/make', function () use ($container) {
+    $controller = $container->get('DeckController');
+    $request = Request::fromGlobals();
+    return $controller->make($request);
+});
+
+$router->addRoute('GET', '/deck/{id}', function ($id) use ($container) {
+    $controller = $container->get('DeckController');
+    $request = Request::fromGlobals();
+    return $controller->show($request, $id);
+});
+
+$router->addRoute('POST', '/deck/delete/{id}', function ($id) use ($container) {
+    $controller = $container->get('DeckController');
+    $request = Request::fromGlobals();
+    return $controller->delete($request, $id);
+});
+
+$router->addRoute('POST', '/card/update/{id}', function ($id) use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->update(Request::fromGlobals(), $id);
+});
+
+$router->addRoute('POST', '/card/delete/{id}', function ($id) use ($container) {
+    $controller = $container->get('CardController');
+    return $controller->delete(Request::fromGlobals(), $id);
+});
+
+$router->addRoute('GET', '/users', function () use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->index();
+});
+$router->addRoute('POST', '/users/delete/{id}', function ($id) use ($container) {
+    $controller = $container->get('UserController');
+    $request = Request::fromGlobals();
+    return $controller->deleteUser($request, $id);
+});
+
+
 $request = Request::fromGlobals();
-$response = $dispatcher->dispatch($request, function($request) use ($router) {
+$response = $dispatcher->dispatch($request, function ($request) use ($router) {
     return $router->dispatch($request);
 });
 $response->send();
