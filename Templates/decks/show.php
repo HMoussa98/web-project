@@ -123,6 +123,7 @@
     </style>
 </head>
 <body>
+    
 <h1><?= htmlspecialchars($deck['name']) ?></h1>
 <div class="deck-details">
     <h2>Cards in Deck</h2>

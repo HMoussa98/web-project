@@ -57,7 +57,7 @@ class DeckController
 
         $cards = $this->deckModel->getCardsInDeck($deckId);
         $deck = $this->deckModel->getDeckById($deckId);
-
+        var_dump($deck);
         $content = $this->template->render('decks/show', [
 
             'cards' => $cards,
