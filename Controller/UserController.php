@@ -25,6 +25,11 @@ class UserController
         return new Response($content);
     }
 
+    public function showForm(): Response
+    {
+        return new Response($this->template->render('users/edit'));
+    }
+
     public function deleteUser(Request $request, $id): Response
     {
         if ($request->getMethod() === 'POST') {

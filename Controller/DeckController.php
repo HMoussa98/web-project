@@ -83,4 +83,18 @@ class DeckController
         // Redirect to /decks after deletion
         return new Response('', 303, ['Location' => '/decks']);
     }
+
+    public function index(Request $request): Response
+    {
+        // Replace with user authentication logic to get userId
+        $userId = 1; // Replace with actual user ID
+
+        $decks = $this->deckModel->getAllDecksByUserId($userId);
+
+        $content = $this->template->render('decks/index', [
+            'decks' => $decks,
+        ]);
+
+        return new Response($content);
+    }
 }

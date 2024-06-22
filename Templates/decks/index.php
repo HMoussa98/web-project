@@ -1,10 +1,11 @@
-<!-- users/index.php -->
+<!-- templates/decks/index.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User List</title>
+    <title>User Decks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +16,7 @@
             max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
-            padding: 20px;
+            padding: 30px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
@@ -26,68 +27,59 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
-        table th, table td {
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
             padding: 10px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
-        table th {
+        th {
             background-color: #f2f2f2;
-            font-weight: bold;
-        }
-        table td {
-            vertical-align: middle;
         }
         .actions {
-            white-space: nowrap;
+            display: flex;
+            gap: 10px;
         }
-        .actions form,
-        .actions a {
-            margin-right: 10px;
-            margin-bottom: 4px; /* Added 4px spacing */
-        }
-        .actions button,
-        .actions a {
-            padding: 5px 10px;
-            text-decoration: none;
-            border: none;
+        .actions a, .actions button {
+            padding: 8px 12px;
             background-color: #007bff;
-            color: #fff;
-            border-radius: 3px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
             cursor: pointer;
+            text-align: center;
         }
-        .actions button:hover,
-        .actions a:hover {
+        .actions a:hover, .actions button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>User List</h1>
+    <h1>User Decks</h1>
 
     <table>
         <thead>
         <tr>
             <th>ID</th>
-            <th>Username</th>
-            <th>Role</th>
+            <th>Name</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($users as $user): ?>
+        <?php foreach ($decks as $deck): ?>
             <tr>
-                <td><?php echo $user->getId(); ?></td>
-                <td><?php echo htmlspecialchars($user->getUsername()); ?></td>
-                <td><?php echo $user->getRole(); ?></td>
+                <td><?= $deck['id'] ?></td>
+                <td><?= htmlspecialchars($deck['name']) ?></td>
                 <td class="actions">
-                    <form action="/users/delete/<?php echo $user->getId(); ?>" method="post">
+                    <a href="/deck/<?= $deck['id'] ?>">View</a>
+                    <form action="/deck/delete/<?= $deck['id'] ?>" method="post">
                         <button type="submit">Delete</button>
                     </form>
-                    <a href="/users/edit/<?php echo $user->getId(); ?>">Edit</a>
                 </td>
             </tr>
         <?php endforeach; ?>

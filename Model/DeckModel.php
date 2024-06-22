@@ -23,7 +23,7 @@ class DeckModel
         return $this->db->lastInsertId();
     }
 
-    public function getDecksByUserId($userId)
+    public function getAllDecksByUserId($userId)
     {
         $stmt = $this->db->prepare("SELECT * FROM decks WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);

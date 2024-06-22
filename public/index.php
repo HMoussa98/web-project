@@ -1,6 +1,7 @@
 <?php
 require_once '../vendor/autoload.php';
 
+use app\Controller\DeckController;
 use app\Http\Request;
 use app\Http\Response;
 use app\Middleware\Dispatcher;
@@ -47,9 +48,10 @@ $container->set('UserController', function ($container) {
     return new app\Controller\UserController($container->get('template'), $container->get('UserModel'));
 });
 
-$container->set('DeckController', function ($container) { // Corrected to DeckController
-    return new app\Controller\DeckController($container->get('template'), $container->get('DeckModel')); // Instantiate DeckController
+$container->set('DeckController', function ($container) {
+    return new DeckController($container->get('template'), $container->get('DeckModel'));
 });
+
 
 $dispatcher = new Dispatcher();
 $dispatcher->add(new RequestLogger());
@@ -108,9 +110,16 @@ $router->addRoute('GET', '/card/edit', function () use ($container) {
 });
 
 
+// Define routes for DeckController
 $router->addRoute('GET', '/decks', function () use ($container) {
     $controller = $container->get('DeckController');
-    return $controller->index();
+    $request = Request::fromGlobals(); // Create Request object
+    return $controller->index($request); // Pass Request object to index method
+});
+
+$router->addRoute('GET', '/decks', function () use ($container) {
+    $controller = $container->get('DeckController');
+    return $controller->index(Request::fromGlobals());
 });
 
 $router->addRoute('GET', '/deck/make', function () use ($container) {
@@ -150,6 +159,12 @@ $router->addRoute('GET', '/users', function () use ($container) {
     $controller = $container->get('UserController');
     return $controller->index();
 });
+
+$router->addRoute('GET', '/users/show-edit', function () use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->showForm();
+});
+
 $router->addRoute('POST', '/users/delete/{id}', function ($id) use ($container) {
     $controller = $container->get('UserController');
     $request = Request::fromGlobals();

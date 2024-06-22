@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Card</title>
+    <title>Edit User</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,7 +32,7 @@
             font-weight: bold;
         }
         input[type="text"],
-        input[type="number"] {
+        select {
             width: 100%;
             padding: 8px;
             margin-bottom: 15px;
@@ -59,28 +59,19 @@
 </head>
 <body>
 <div class="container">
-    <h1>Create Card</h1>
+    <h1>Edit User</h1>
 
-    <form method="post" action="/cards/create">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br>
+    <form method="post" action="/users/update/<?= $user['id'] ?>">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required><br>
 
-        <label for="attack">Attack:</label>
-        <input type="number" id="attack" name="attack" required><br>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="user" <?= ($user['role'] === 'user') ? 'selected' : '' ?>>User</option>
+            <option value="admin" <?= ($user['role'] === 'admin') ? 'selected' : '' ?>>Admin</option>
+        </select><br>
 
-        <label for="defense">Defense:</label>
-        <input type="number" id="defense" name="defense" required><br>
-
-        <label for="set_name">Set Name:</label>
-        <input type="text" id="set_name" name="set_name" required><br>
-
-        <label for="rarity">Rarity:</label>
-        <input type="text" id="rarity" name="rarity" required><br>
-
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" step="0.01" required><br>
-
-        <button type="submit">Create Card</button>
+        <button type="submit">Update User</button>
     </form>
 </div>
 </body>

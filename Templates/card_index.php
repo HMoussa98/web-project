@@ -108,6 +108,10 @@
     <a href="/deck/make">
         <button type="submit">Make Deck</button>
     </a>
+
+    <a href="/cards/create">
+        <button type="submit">Make Card</button>
+    </a>
 </div>
 <ul class="card-grid">
     <?php foreach ($cards as $card): ?>
