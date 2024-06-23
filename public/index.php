@@ -265,13 +265,13 @@ if (session_status() == PHP_SESSION_NONE) {
 ?>
 
 <div class="navbar">
-    <?= ($_SESSION['loggedin']) ? '<a href="/">Home</a>' : '' ?>
-    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' || $_SESSION['role'] == 'premium' ? 
+    <?= isset($_SESSION['loggedin']) ? '<a href="/">Home</a>' : '' ?>
+    <?= isset($_SESSION['loggedin']) && ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'premium') ? 
     '<a href="/decks">View Decks</a>' : '' ?>
-    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/cards/create">Create Card</a>' : '' ?>
-    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/users">View Users</a>' : '' ?>
+    <?= isset($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/cards/create">Create Card</a>' : '' ?>
+    <?= isset($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/users">View Users</a>' : '' ?>
     <div class="right">
-        <?= ($_SESSION['loggedin']) ? '<a class="login-btn" href="/logout">Logout</a>' :
+        <?= isset($_SESSION['loggedin']) ? '<a class="login-btn" href="/logout">Logout</a>' :
         '<a class="login-btn" href="/login">Login</a>
         <a class="register-btn" href="/register">Register</a>' ?>
     </div>
