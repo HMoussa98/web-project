@@ -27,8 +27,7 @@ class DeckController
                 return new Response('Deck name is required', 400);
             }
 
-            // Replace with user authentication logic to get userId
-            $userId = 1; // Replace with actual user ID
+            $userId = $_SESSION['user_id'];
 
             try {
                 $deckId = $this->deckModel->createDeck($userId, $data['name']);
@@ -48,8 +47,8 @@ class DeckController
 
     public function show(Request $request, $deckId): Response
     {
-        // Replace with user authentication logic to get userId
-        $userId = 1; // Replace with actual user ID
+        
+        $userId = $_SESSION['user_id'];
 
         $deckId = $request->getIdFromUri();
 
@@ -57,7 +56,7 @@ class DeckController
 
         $cards = $this->deckModel->getCardsInDeck($deckId);
         $deck = $this->deckModel->getDeckById($deckId);
-        var_dump($deck);
+        // var_dump($deck);
         $content = $this->template->render('decks/show', [
 
             'cards' => $cards,
@@ -70,7 +69,7 @@ class DeckController
     public function delete(Request $request): Response
     {
         // Replace with user authentication logic to get userId
-        $userId = 1; // Replace with actual user ID
+        $userId = $_SESSION['user_id'];
 
         $deckId = $request->getIdFromUri();
 
@@ -84,8 +83,7 @@ class DeckController
 
     public function index(Request $request): Response
     {
-        // Replace with user authentication logic to get userId
-        $userId = 1; // Replace with actual user ID
+        $userId = $_SESSION['user_id'];
 
         $decks = $this->deckModel->getAllDecksByUserId($userId);
 
@@ -109,7 +107,7 @@ class DeckController
             }
 
             // Replace with user authentication logic to get userId
-            $userId = 1; // Replace with actual user ID
+            $userId = $_SESSION['user_id']; // Replace with actual user ID
 
             $deck = $this->deckModel->getDeckById($deckId);
 

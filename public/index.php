@@ -1,12 +1,12 @@
 <?php
 require_once '../vendor/autoload.php';
-session_start();
 
 use app\Controller\DeckController;
 use app\Http\Request;
 use app\Http\Response;
 use app\Middleware\Dispatcher;
 use app\Middleware\RequestLogger;
+use app\Middleware\AuthMiddleware;
 use app\Routing\Router;
 use app\Container\Container;
 use app\View\Template;
@@ -55,6 +55,7 @@ $container->set('DeckController', function ($container) {
 
 $dispatcher = new Dispatcher();
 $dispatcher->add(new RequestLogger());
+$dispatcher->add(new AuthMiddleware());
 
 $router = new Router($container);
 
@@ -84,6 +85,11 @@ $router->addRoute('POST', '/login', function () use ($container) {
     $controller = $container->get('UserController');
     $request = Request::fromGlobals();
     return $controller->login($request);
+});
+
+$router->addRoute('GET', '/logout', function () use ($container) {
+    $controller = $container->get('UserController');
+    return $controller->logout();
 });
 
 $router->addRoute('GET', '/register', function () use ($container) {
@@ -156,8 +162,6 @@ $router->addRoute('GET', '/card/show/{id}', function ($id) use ($container) {
     $controller = $container->get('CardController');
     return $controller->show(Request::fromGlobals(), $id);
 });
-
-
 
 
 $router->addRoute('GET', '/users', function () use ($container) {
@@ -254,13 +258,21 @@ $response->send();
     </style>
 </head>
 
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <div class="navbar">
-    <a href="/">Home</a>
-    <a href="/cards/create">Create Card</a>
-    <a href="/decks">View Decks</a>
-    <a href="/users">View Users</a>
+    <?= ($_SESSION['loggedin']) ? '<a href="/">Home</a>' : '' ?>
+    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' || $_SESSION['role'] == 'premium' ? 
+    '<a href="/decks">View Decks</a>' : '' ?>
+    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/cards/create">Create Card</a>' : '' ?>
+    <?= ($_SESSION['loggedin']) && $_SESSION['role'] == 'admin' ? '<a href="/users">View Users</a>' : '' ?>
     <div class="right">
-        <a class="login-btn" href="/login">Login</a>
-        <a class="register-btn" href="/register">Register</a>
+        <?= ($_SESSION['loggedin']) ? '<a class="login-btn" href="/logout">Logout</a>' :
+        '<a class="login-btn" href="/login">Login</a>
+        <a class="register-btn" href="/register">Register</a>' ?>
     </div>
 </div>

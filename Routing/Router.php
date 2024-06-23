@@ -1,9 +1,6 @@
 <?php
 
 namespace app\Routing;
-
-
-
 use app\Http\Request;
 use app\Http\Response;
 
@@ -17,7 +14,7 @@ class Router
     }
 
     public function dispatch(Request $request): Response
-    {
+    {   
         $requestUri = $request->getUri();
         $requestMethod = $request->getMethod();
 

@@ -150,13 +150,21 @@
 <body>
     <h1 style="text-align: center;">All Cards</h1>
     <div class="make-deck-button">
-        <a href="/decks">
-            <button type="submit">Make Deck</button>
-        </a>
+    <?php
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    ?>
+    <?= $_SESSION['role'] == 'pepremium' || $_SESSION['role'] == 'admin' ? 
+    '<a href="/decks">
+    <button type="submit">Make Deck</button>
+</a>' : '' ?>
 
-        <a href="/cards/create">
-            <button type="submit">Make Card</button>
-        </a>
+    <?= $_SESSION['role'] == 'admin' ? 
+        '<a href="/cards/create">
+        <button type="submit">Make Card</button>
+    </a>' : '' ?>
+
     </div>
     <ul class="card-grid">
         <?php foreach ($cards as $card): ?>
@@ -172,14 +180,15 @@
                     <span>Price: $<?= $card['price'] ?></span>
                 </div>
                 <div class="card-buttons">
-                    <form method="post" action="/card/edit/<?= $card['id'] ?>">
-                        <button type="submit">Edit</button>
-                    </form>
-                    <form onsubmit="return confirm('Are you sure you want to delete this Card?');" method="post" action="/card/delete/<?= $card['id'] ?>">
-                        <input type="hidden" name="id" value="<?= $card['id'] ?>">
-                        <button type="submit">Delete</button>
-                    </form>
-                    
+                    <?php if ($_SESSION['role'] == 'admin'): ?>
+                        <form method="post" action="/card/edit/<?= $card['id'] ?>">
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form onsubmit="return confirm('Are you sure you want to delete this Card?');" method="post" action="/card/delete/<?= $card['id'] ?>">
+                            <input type="hidden" name="id" value="<?= $card['id'] ?>">
+                            <button type="submit">Delete</button>
+                        </form>
+                    <?php endif ?>
                 </div>
             </li>
         <?php endforeach; ?>

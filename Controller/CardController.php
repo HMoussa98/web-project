@@ -32,7 +32,6 @@ class CardController
         if ($request->getMethod() === 'POST') {
             $data = $request->getPostData();
 
-            // Validate if all required fields are present
             if (
                 !isset($data['name']) ||
                 !isset($data['attack']) ||
@@ -68,7 +67,7 @@ class CardController
     public function show(Request $request): Response
     {
 
-        $userId = 1;
+        $userId = $_SESSION['user_id'];
 
         $decks = $this->deckModel->getAllDecksByUserId($userId);
 
@@ -93,9 +92,7 @@ class CardController
     {
         if ($request->getMethod() === 'POST') {
             $id = $request->getIdFromUri();
-
-            // Debugging: var dump to check the value of $id
-            var_dump($id);
+            // var_dump($id);
 
             try {
                 $this->cardModel->deleteCard($id);
@@ -107,9 +104,6 @@ class CardController
             return new Response('Wrong request method', 400);
         }
     }
-
-
-
 
     public function edit(Request $request): Response
     {

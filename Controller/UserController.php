@@ -16,9 +16,6 @@ class UserController
     {
         $this->template = $template;
         $this->userModel = $userModel;
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
     }
 
     public function index(): Response
@@ -48,7 +45,7 @@ class UserController
                     return new Response('Failed to update user', 500);
                 }
 
-                // Optionally, redirect to the user list or show a success message
+                
                 return new Response('User updated successfully', 200);
             } catch (\PDOException $e) {
                 return new Response('Failed to update user: ' . $e->getMessage(), 500);
@@ -66,9 +63,6 @@ class UserController
         $content = $this->template->render('users/edit', ['user' => $user]);
         return new Response($content);
     }
-
-
-
 
     public function showForm(): Response
     {
@@ -109,12 +103,8 @@ class UserController
                     'role' => 'user'
                 ]);
 
-                // Store username and user_id in session
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-
                 // Return a success message or render a success template if needed
-                return new Response('User registered successfully', 201);
+                return new Response('User registered successfully <a href="/login">Login</a>', 201);
             } catch (\PDOException $e) {
                 return new Response('Failed to register user: ' . $e->getMessage(), 500);
             }
@@ -146,11 +136,11 @@ class UserController
                 return new Response('Invalid username or password', 401);
             }
 
-            // Store username and user_id in session
+            session_start();
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
+            $_SESSION["loggedin"] = true;
+            $_SESSION['role'] = $user['role'];
 
-            // Return a success message or render a success template if needed
             return new Response('Login successful', 200);
         }
 
@@ -159,11 +149,9 @@ class UserController
 
     public function logout(): Response
     {
-        // Delete session variables
         session_unset();
         session_destroy();
 
-        // Redirect to home page or render a logout confirmation message
         return new Response('Logged out successfully', 200);
     }
 }
