@@ -31,7 +31,7 @@ class DeckController
 
             try {
                 $deckId = $this->deckModel->createDeck($userId, $data['name']);
-                return new Response("Deck created with ID: $deckId", 201);
+                return new Response("Deck created successfully <a href='/'>Go to home page</a>", 201);
             } catch (\PDOException $e) {
                 return new Response('Failed to create deck: ' . $e->getMessage(), 500);
             }
@@ -74,11 +74,8 @@ class DeckController
         $deckId = $request->getIdFromUri();
 
 
-
         $this->deckModel->deleteDeck($deckId);
-
-        // Redirect to /decks after deletion
-        return new Response('', 303, ['Location' => '/decks']);
+        return new Response("Deck deleted successfully <a href='/'>Go to home page</a>", 201);
     }
 
     public function index(Request $request): Response
@@ -121,7 +118,7 @@ class DeckController
                 $this->deckModel->addCardToDeck($deckId, $cardId, $count);
                 return new Response('Card added to deck successfully', 200);
             } catch (\PDOException $e) {
-                return new Response('Failed to add card to deck: ' . $e->getMessage(), 500);
+                return new Response('Failed to add card to deck: The card is already add to this deck', 500);
             }
         }
 

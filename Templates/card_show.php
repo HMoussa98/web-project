@@ -116,6 +116,12 @@
             </div>
         </div>
         <div class="card-actions">
+        <?php
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+        ?>
+        <?php if ($_SESSION['role'] == 'premium' || $_SESSION['role'] == 'admin'): ?>
             <form method="post" action="/deck/add/<?= $card['id'] ?>">
                 <select name="deck_id">
                     <?php foreach ($decks as $deck): ?>
@@ -124,6 +130,8 @@
                 </select>
                 <button type="submit">Add to Deck</button>
             </form>
+            
+        <?php endif ?>
             
         </div>
     </div>

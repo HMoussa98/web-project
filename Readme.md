@@ -36,8 +36,7 @@ Kaart Toevoegen ("/addcard"): Pagina om een kaart aan de database toe te voegen.
 Gebruikers worden geregistreerd met de standaardrol 'user' en het abonnementstype 'free'.
 Gebruikersnaam en wachtwoord voor de beheerder:
 Gebruikersnaam: admin
-E-mail: admin@test.com
-Wachtwoord: admin
+Wachtwoord: test
 
 Gebruik
 

@@ -7,7 +7,7 @@ use app\Http\Response;
 class AuthMiddleware implements Middleware {
     private $loggedout = ['/login', '/register'];
     private $admin = ['/users', '/users/edit/{id}', '/users/delete/{id}', '/cards/create'];
-    private $premium = ['/decks', '/deck/{id}', '/deck/remove/{id}', '/deck/make'];
+    private $premium = ['/decks', '/deck/{id}', '/deck/remove/{id}', '/deck/make', '/deck/add/{id}'];
 
     public function handle(Request $request, callable $next): Response {
         if (session_status() == PHP_SESSION_NONE) {
